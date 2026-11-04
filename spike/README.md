@@ -4,8 +4,8 @@ A minimal Android app that **enables the Sony XQZ-IV01 Vlog Monitor** by sending
 the vendor heartbeat, then lets the phone's built-in secondary-display mirroring
 show the screen on it. No MediaProjection, Sony code, or audio routing.
 
-Confirmed on a **Galaxy S23** (One UI, DeX auto-start off): the monitor mirrors
-the Samsung Camera app, scaled/letterboxed to 1280×720.
+Confirmed on a **Galaxy S23** (One UI, DeX auto-start off) and a **Sony Xperia 1 V**:
+the monitor mirrors the camera app, scaled/letterboxed to 1280×720.
 
 ## Features
 
@@ -33,7 +33,7 @@ installs for the file manager or temporarily disable Auto Blocker.
 
 ## Use
 
-1. On the S23, turn off DeX auto-start:
+1. On Samsung devices, turn off DeX auto-start:
    **Settings → Connected devices → Samsung DeX → “Auto start when HDMI is
    connected” = off.**
 2. Turn the monitor's screen switch **ON**, then connect the XQZ-IV01 to the
@@ -44,7 +44,15 @@ installs for the file manager or temporarily disable Auto Blocker.
 5. Optional: add the **XQZ monitor** Quick Settings tile for one-tap toggling.
 
 If DeX starts instead of mirroring, switch to **Screen mirroring** from the
-notification, or turn off DeX auto-start and reconnect.
+notification, or turn off DeX auto-start and reconnect. The Xperia 1 V has no
+DeX step; it mirrors directly.
+
+## Tested devices
+
+| Device | Result |
+|---|---|
+| Samsung Galaxy S23 | Works; requires DeX auto-start off |
+| Sony Xperia 1 V | Works; mirrors directly |
 
 ## Troubleshooting
 
