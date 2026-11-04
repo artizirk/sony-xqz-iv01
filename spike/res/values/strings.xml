@@ -1,4 +1,61 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_name">XQZ Enabler</string>
+    <string name="app_title">XQZ Monitor Enabler</string>
+    <string name="start">Start</string>
+    <string name="stop">Stop</string>
+
+    <string name="help_text">1. Turn the monitor screen switch ON and connect it to the phone.\n\n2. On Samsung phones, turn OFF DeX auto-start:\nSettings &gt; Connected devices &gt; Samsung DeX &gt;\n&quot;Auto start when HDMI is connected&quot; = off.\n\n3. Tap Start and allow USB access. Choose &quot;Always open XQZ Enabler&quot; so a replug reconnects without another tap.\n\n4. Open the Camera app. The phone OS mirrors the screen to the monitor.\n\nIf DeX starts instead, switch to Screen mirroring from the notification, or turn off DeX auto-start and reconnect. The Xperia mirrors directly.\n\nKeep the notification enabled for the Stop action; the Quick Settings tile starts and stops the service while it is running, and retries or opens this app while waiting. Without the &quot;Always open&quot; choice, Android asks for USB access again after a replug.</string>
+
+    <string name="footer">\nIf the camera preview is black on the monitor, the camera app is probably blocking screen capture; that is the signal to try the MediaProjection path.</string>
+
+    <string name="status_format">Monitor: %1$s\nHeartbeat: %2$s</string>
+    <string name="status_waiting_permission">Waiting for USB permission…</string>
+    <string name="status_starting">Heartbeat starting…</string>
+    <string name="status_stopped">Heartbeat stopped</string>
+    <string name="monitor_connected">connected</string>
+    <string name="monitor_disconnected">not connected</string>
+
+    <string name="heartbeat_stopped">stopped</string>
+    <string name="heartbeat_running">running</string>
+    <string name="heartbeat_reconnecting">reconnecting</string>
+    <string name="heartbeat_waiting_device">waiting for monitor</string>
+    <string name="heartbeat_waiting_permission">waiting (allow USB)</string>
+    <string name="heartbeat_waiting_usb_access">waiting for USB access</string>
+    <string name="heartbeat_notifications_off">(notifications off)</string>
+
+    <string name="toast_monitor_not_connected">Monitor not connected (054c:0e48)</string>
+    <string name="toast_usb_unavailable">USB host service unavailable</string>
+    <string name="toast_permission_denied">USB permission denied</string>
+    <string name="toast_start_failed">Could not start service: %1$s</string>
+    <string name="toast_notifications_blocked">Notifications are blocked; stop the service from the app or the tile.</string>
+    <string name="toast_open_app_for_usb">Open XQZ Enabler to allow USB access</string>
+    <string name="toast_enable_notifications">Allow notifications in XQZ Enabler so Stop stays available</string>
+    <string name="toast_monitor_starting">XQZ monitor starting…</string>
+
+    <string name="notif_channel_name">XQZ monitor heartbeat</string>
+    <string name="notif_channel_desc">Keeps the XQZ-IV01 display enabled</string>
+    <string name="notif_title">XQZ monitor</string>
+    <string name="notif_starting">Starting…</string>
+    <string name="notif_waiting_device">Waiting for monitor</string>
+    <string name="notif_connected_starting">Monitor connected — starting…</string>
+    <string name="notif_waiting_permission">Monitor connected — open XQZ Enabler to allow USB access</string>
+    <string name="notif_running">Running — %1$d ms heartbeat</string>
+    <string name="notif_retry">Retrying: %1$s</string>
+    <string name="notif_flip">FLIP pressed</string>
+    <string name="notif_stop">Stop</string>
+    <string name="notif_usb_unavailable">USB host service unavailable</string>
+    <string name="notif_open_failed">Could not open USB device</string>
+    <string name="notif_no_endpoints">No vendor bulk IN/OUT interface</string>
+    <string name="notif_claim_failed">Could not claim interface</string>
+    <string name="notif_heartbeat_failed">Heartbeat transfer failed</string>
+    <string name="notif_session_failed">USB session failed: %1$s</string>
+    <string name="notif_connection_ended">Connection ended</string>
+
+    <string name="tile_label">XQZ monitor</string>
+    <string name="tile_running">Running</string>
+    <string name="tile_waiting_device">Waiting for monitor</string>
+    <string name="tile_waiting_permission">Waiting for USB access</string>
+    <string name="tile_retrying">Retrying…</string>
+    <string name="tile_stopped">Stopped</string>
 </resources>

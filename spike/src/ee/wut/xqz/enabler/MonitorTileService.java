@@ -1,5 +1,7 @@
 package ee.wut.xqz.enabler;
 
+import android.content.ComponentName;
+import android.content.Context;
 import android.content.Intent;
 import android.hardware.usb.UsbDevice;
 import android.hardware.usb.UsbManager;
@@ -10,9 +12,6 @@ import android.service.quicksettings.TileService;
 import android.widget.Toast;
 
 public final class MonitorTileService extends TileService {
-    private static final int VID = 0x054C;
-    private static final int PID = 0x0E48;
-
     private final Handler handler = new Handler(Looper.getMainLooper());
 
     @Override
@@ -22,40 +21,84 @@ public final class MonitorTileService extends TileService {
     }
 
     @Override
+    public void onTileAdded() {
+        super.onTileAdded();
+        updateTile();
+    }
+
+    @Override
     public void onClick() {
         super.onClick();
-        if (HeartbeatService.isRunning()) {
-            stopService(new Intent(this, HeartbeatService.class));
-            handler.postDelayed(this::updateTile, 700);
+        RunState state = HeartbeatService.getState();
+        if (state == RunState.RUNNING) {
+            HeartbeatService.requestStop(this);
+            refreshLater();
+            return;
+        }
+        if (state.isActive()) {
+            if (state == RunState.WAITING_PERMISSION) {
+                openApp();
+            } else {
+                try {
+                    startForegroundService(new Intent(this, HeartbeatService.class));
+                    HeartbeatService.setUserEnabled(this, true);
+                } catch (Throwable t) {
+                    Toast.makeText(this, getString(R.string.toast_start_failed, t.getMessage()),
+                            Toast.LENGTH_SHORT).show();
+                }
+            }
+            refreshLater();
             return;
         }
 
         UsbDevice device = findDevice();
         if (device == null) {
-            Toast.makeText(this, "Connect the XQZ monitor", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, R.string.toast_monitor_not_connected,
+                    Toast.LENGTH_SHORT).show();
             return;
         }
         UsbManager manager = getSystemService(UsbManager.class);
         if (manager == null || !manager.hasPermission(device)) {
-            Toast.makeText(this, "Open XQZ Enabler to allow USB access",
+            Toast.makeText(this, R.string.toast_open_app_for_usb,
                     Toast.LENGTH_SHORT).show();
+            return;
+        }
+        if (NotificationPermission.shouldAsk(this)) {
+            Toast.makeText(this, R.string.toast_enable_notifications,
+                    Toast.LENGTH_SHORT).show();
+            openApp();
             return;
         }
 
         try {
             startForegroundService(new Intent(this, HeartbeatService.class));
+            HeartbeatService.setUserEnabled(this, true);
         } catch (Throwable t) {
-            Toast.makeText(this, "Could not start: " + t.getMessage(),
+            Toast.makeText(this, getString(R.string.toast_start_failed, t.getMessage()),
                     Toast.LENGTH_SHORT).show();
         }
+        refreshLater();
+    }
+
+    private void refreshLater() {
         handler.postDelayed(this::updateTile, 700);
+    }
+
+    private void openApp() {
+        try {
+            startActivity(new Intent(this, MainActivity.class)
+                    .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK));
+        } catch (Throwable ignored) {
+        }
     }
 
     private UsbDevice findDevice() {
         UsbManager manager = getSystemService(UsbManager.class);
         if (manager == null) return null;
-        for (UsbDevice d : manager.getDeviceList().values()) {
-            if (d.getVendorId() == VID && d.getProductId() == PID) return d;
+        for (UsbDevice device : manager.getDeviceList().values()) {
+            if (MonitorProtocol.isMonitor(device.getVendorId(), device.getProductId())) {
+                return device;
+            }
         }
         return null;
     }
@@ -63,8 +106,35 @@ public final class MonitorTileService extends TileService {
     private void updateTile() {
         Tile tile = getQsTile();
         if (tile == null) return;
-        tile.setState(HeartbeatService.isRunning() ? Tile.STATE_ACTIVE : Tile.STATE_INACTIVE);
-        tile.setLabel("XQZ monitor");
+        RunState state = HeartbeatService.getState();
+        tile.setState(state == RunState.RUNNING ? Tile.STATE_ACTIVE : Tile.STATE_INACTIVE);
+        tile.setLabel(getString(R.string.tile_label));
+        tile.setSubtitle(getString(subtitleFor(state)));
         tile.updateTile();
+    }
+
+    private static int subtitleFor(RunState state) {
+        switch (state) {
+            case RUNNING:
+                return R.string.tile_running;
+            case WAITING_DEVICE:
+                return R.string.tile_waiting_device;
+            case WAITING_PERMISSION:
+                return R.string.tile_waiting_permission;
+            case RETRYING:
+                return R.string.tile_retrying;
+            case STOPPED:
+            default:
+                return R.string.tile_stopped;
+        }
+    }
+
+    /** Ask the system to bind the tile so its state/subtitle refresh. */
+    public static void requestUpdate(Context context) {
+        try {
+            TileService.requestListeningState(context,
+                    new ComponentName(context, MonitorTileService.class));
+        } catch (Throwable ignored) {
+        }
     }
 }

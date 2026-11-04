@@ -142,14 +142,18 @@ VID/PID check is unchanged. There is no security chip or cryptographic handshake
 
 ## Working third-party enabler
 
-`spike/` contains a small release-signed Android app (**XQZ Enabler 1.0**) that
-was confirmed on a **Galaxy S23** and a **Sony Xperia 1 V**:
+`spike/` contains a small release-signed Android app (**XQZ Enabler 1.1**).
+Version 1.0 was confirmed on a **Galaxy S23** and a **Sony Xperia 1 V**; 1.1
+changes the reconnect/retry/UI paths and has not yet been re-tested on hardware.
 
 - requests USB permission for `054c:0e48`;
 - sends `show` every 400 ms from a foreground service;
-- auto-reconnects when the monitor is replugged;
-- provides a Quick Settings tile;
-- lets One UI mirror the phone screen (including the Camera app) to the monitor.
+- handles USB attach so a replug can reconnect when the app is the default
+  handler (“Always open XQZ Enabler”); otherwise pick the app in the USB
+  chooser or tap Start;
+- retries transient USB failures with capped backoff;
+- provides a Quick Settings tile with running/waiting state;
+- lets the phone OS mirror the screen (including the Camera app) to the monitor.
 
 With DeX auto-start off, the S23 treats the monitor as a normal 1280×720 secondary
 display and mirrors the screen. On the Xperia 1 V, Android mirrors the screen

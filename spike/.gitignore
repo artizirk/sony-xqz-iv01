@@ -1,4 +1,5 @@
 build/
 debug.keystore
 release.keystore
+.storepass
 *.idsig
