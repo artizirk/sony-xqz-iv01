@@ -125,8 +125,7 @@ UAC device matches the USB types (11/22). It then switches the audio source to
 **`UNPROCESSED` (9)**, selects the device with
 `AudioRecord`/`MediaRecorder.setPreferredDevice()`, and sends
 `AudioManager.setParameters("somc_selfie_accessary=true")` to Sony's audio HAL.
-The mic is digitized by this codec; there is no analog link and no PCM on the
-`0e48` channel.
+The mic is digitized by this codec; no PCM travels on the `0e48` channel.
 
 ## Compatibility gate
 
