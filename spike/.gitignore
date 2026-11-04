@@ -1,0 +1,4 @@
+build/
+debug.keystore
+release.keystore
+*.idsig

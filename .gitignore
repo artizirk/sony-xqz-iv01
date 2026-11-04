@@ -1,7 +1,7 @@
 # Local analysis artifacts (proprietary / large)
-apk/
-out/
-src/
-tools/apktool.jar
+/apk/
+/out/
+/src/
+/tools/apktool.jar
 __pycache__/
 *.pyc

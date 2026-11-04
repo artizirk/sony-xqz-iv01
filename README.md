@@ -140,6 +140,24 @@ Stock apps enable the feature only when:
 The community “Xperia 1 VIII Vlog Monitor” mod simply forces that flag true; the
 VID/PID check is unchanged. There is no security chip or cryptographic handshake.
 
+## Working third-party enabler
+
+`spike/` contains a small release-signed Android app (**XQZ Enabler 1.0**) that
+was confirmed on a **Galaxy S23**:
+
+- requests USB permission for `054c:0e48`;
+- sends `show` every 400 ms from a foreground service;
+- auto-reconnects when the monitor is replugged;
+- provides a Quick Settings tile;
+- lets One UI mirror the phone screen (including the Camera app) to the monitor.
+
+With DeX auto-start off, the S23 treats the monitor as a normal 1280×720 secondary
+display and mirrors the screen. No MediaProjection or Sony code is used.
+APK: `spike/XQZEnabler.apk`; instructions in `spike/README.md`.
+
+Caveat: this relies on the phone OS mirroring the screen to the external display.
+Other Android vendors may show a desktop mode or need a MediaProjection fallback.
+
 ## Reimplementation blueprint
 
 1. Open `054c:0e48`, claim interface 0, find the bulk IN/OUT pair, request USB
